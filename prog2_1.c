@@ -7,22 +7,6 @@ int main(int argc, char** argv) {
   TSAFELIST* linkedList = NULL;
   linkedList = tSafeConstruct();
 
-  for(int i = 9 ; i >= 0 ; i--) {
-    tSafeEnqueue(linkedList, i);
-  }
-
-  TSAFEDATA d = tSafeDequeue(linkedList);
-
-  if(d.isValid) {
-    printf("popped: %d\n", d.value);
-  }
-
-  tSafeEnqueue(linkedList, -100);
-
-  tSafeDestruct(linkedList);
-
-  printf("destructed list\n");
-
 }
 
 TSAFELIST* tSafeConstruct() {
@@ -45,7 +29,7 @@ void tSafeDestruct(TSAFELIST* list) {
     temp = node;
     node = node->next;
     free(temp);
-    printf("freed entry %d\n", i);
+    //printf("freed entry %d\n", i);
     i++;
   }
   //then:
@@ -54,16 +38,17 @@ void tSafeDestruct(TSAFELIST* list) {
 
 void tSafeEnqueue(TSAFELIST * list, mpz_t item) {
   if(list == NULL) {
-    printf("list null\n");
+    //printf("list null\n");
+    // don't do things
   }
   TSAFENODE* node;
   if(list->head == NULL) {
-    printf("list empty\n");
+    //printf("list empty\n");
     list->head = (TSAFENODE*) malloc(sizeof(TSAFENODE));
     node = list->head;
     node->number = item;
     node->next = NULL;
-    printf("added: %d\n", list->head->number);
+    //printf("added: %d\n", list->head->number);
   } else {
     int i = 0;
     TSAFENODE* toAdd = malloc(sizeof(TSAFENODE));
@@ -72,14 +57,14 @@ void tSafeEnqueue(TSAFELIST * list, mpz_t item) {
     toAdd->next = NULL;
     // walk the list
     while(node->next != NULL) {
-      printf("%d: %d\n", i, node->number);fflush(NULL);
+      //printf("%d: %d\n", i, node->number);fflush(NULL);
       node = node->next;
       i++;
     }
 
     node->next = toAdd;
-    printf("%d: %d\n", i, node->number);fflush(NULL);
-    printf("added (%d): %d\n", ++i, node->next->number);
+    //printf("%d: %d\n", i, node->number);fflush(NULL);
+    //printf("added (%d): %d\n", ++i, node->next->number);
   }
 
 }

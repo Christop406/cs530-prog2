@@ -1,4 +1,5 @@
 #include <pthread.h>
+#include <gmp.h>
 
 typedef struct tsafenode {
   struct tsafenode *next;

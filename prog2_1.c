@@ -1,12 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "prog2_1.h"
+#include <pthread.h>
 
 
 int main(int argc, char** argv) {
-  TSAFELIST* linkedList = NULL;
-  linkedList = tSafeConstruct();
-
+    TSAFELIST* linkedList = NULL;
+    linkedList = tSafeConstruct();
+    linkedList->mutex = malloc(sizeof(pthread_mutex_t));
+    printf("here\n");fflush(NULL);
+    pthread_mutex_init(linkedList->mutex, NULL);
+    printf("here 2\n");fflush(NULL);
 }
 
 TSAFELIST* tSafeConstruct() {
@@ -46,14 +50,14 @@ void tSafeEnqueue(TSAFELIST * list, mpz_t item) {
     //printf("list empty\n");
     list->head = (TSAFENODE*) malloc(sizeof(TSAFENODE));
     node = list->head;
-    node->number = item;
+    //node->number = item;
     node->next = NULL;
     //printf("added: %d\n", list->head->number);
   } else {
     int i = 0;
     TSAFENODE* toAdd = malloc(sizeof(TSAFENODE));
     node = list->head;
-    toAdd->number = item;
+    //toAdd->number = item;
     toAdd->next = NULL;
     // walk the list
     while(node->next != NULL) {
@@ -73,11 +77,11 @@ TSAFEDATA tSafeDequeue(TSAFELIST * list) {
   TSAFEDATA data;
   if(list == NULL) {
     data.isValid = 0;
-    data.value = 0;
+    //data.value = 0;
   }
   TSAFENODE* tmpHead = list->head;
   data.isValid = 1;
-  data.value = tmpHead->number;
+  //data.value = tmpHead->number;
 
   list->head = tmpHead->next;
 

@@ -3,20 +3,11 @@
 #include "prog2_1.h"
 #include <pthread.h>
 
-
-int main(int argc, char** argv) {
-    TSAFELIST* linkedList = NULL;
-    linkedList = tSafeConstruct();
-    linkedList->mutex = malloc(sizeof(pthread_mutex_t));
-    printf("here\n");fflush(NULL);
-    pthread_mutex_init(linkedList->mutex, NULL);
-    printf("here 2\n");fflush(NULL);
-}
-
 TSAFELIST* tSafeConstruct() {
-  TSAFELIST* list = (TSAFELIST*) malloc(sizeof(TSAFELIST));
-  list->head = NULL;
-  return list;
+    TSAFELIST* list = (TSAFELIST*) malloc(sizeof(TSAFELIST));
+    list->head = NULL;
+    list->mutex = malloc(sizeof(pthread_mutex_t));
+    return list;
 }
 
 void tSafeDestruct(TSAFELIST* list) {

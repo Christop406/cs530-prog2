@@ -76,9 +76,12 @@ void tSafeEnqueue(TSAFELIST * list, mpz_t item) {
 TSAFEDATA tSafeDequeue(TSAFELIST * list) {
     pthread_mutex_lock(list->mutex);
     TSAFEDATA data;
-    if(list == NULL) {
+    if(list == NULL || list->head == NULL) {
         data.isValid = 0;
         //data.value = 0;
+        pthread_mutex_unlock(list->mutex);
+//        printf("returning data\n");
+        return data;
     }
     TSAFENODE* tmpHead = list->head;
     data.isValid = 1;

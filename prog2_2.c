@@ -76,15 +76,9 @@ int main(int argc, char** argv) {
     pthread_create(&t3, NULL, generatePrimes, &num_primes);
     pthread_create(&t4, NULL, generatePrimes, &num_primes);
     
-//    printf("here3\n");
-    
     while(printed < 10) {
-//        printf("here4\n");
         data = tSafeDequeue(numberList);
-        //gmp_printf ("(%Zd) ", globalCounter);
-//        printf("here5\n");
         if(data.isValid == 1) {
-//            printf("here\n");
             gmp_printf ("%Zd\n", data.value);
             printed++;
         } else {

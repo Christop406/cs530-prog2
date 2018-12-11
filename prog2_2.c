@@ -9,13 +9,15 @@
 mpz_t globalCounter;
 int foundCount = 0;
 int threadCounter = 0;
+int numThreads = 4;
+int reps = 100000;
 pthread_mutex_t counterguard = PTHREAD_MUTEX_INITIALIZER;
 TSAFELIST *numberList;
 
-void getNextNum(mpz_t * num) {
+void getNextNum(mpz_t num) {
     pthread_mutex_lock(&counterguard);
     mpz_add_ui(globalCounter, globalCounter, 2);
-    mpz_set(*num, globalCounter);
+    mpz_set(num, globalCounter);
     pthread_mutex_unlock(&counterguard);
 }
 
@@ -36,17 +38,17 @@ void * generatePrimes(void * args) {
             return NULL;
         }
         
-        prob = mpz_probab_prime_p(tempCounter, 100000);
+        prob = mpz_probab_prime_p(tempCounter, reps);
         
         if(prob > 0) {
-            printf("Thread %d found a prime\n", tempTC);
+            //printf("Thread %d found a prime\n", tempTC);
             tSafeEnqueue(numberList, tempCounter);
             foundCount++;
         }
         
         pthread_mutex_unlock(&counterguard);
         
-        getNextNum(&tempCounter);
+        getNextNum(tempCounter);
     }
 }
 
@@ -67,13 +69,13 @@ int main(int argc, char** argv) {
     num_primes = atoi(argv[1]);
     bit_length = atoi(argv[2]);
     
-    printf("Key #: %d, Bit-length: %d, Checks/num: %d, Threads: %d\n", num_primes, bit_length, 100000, 4);
+    printf("Key #: %d, Bit-length: %d, Checks/num: %d, Threads: %d\n", num_primes, bit_length, reps, numThreads);
     
     numberList = tSafeConstruct();
     mpz_init(globalCounter);
     mpz_ui_pow_ui(globalCounter, 2, bit_length);
     mpz_add_ui(globalCounter, globalCounter, 1);
-    for(int i = 0; i < 4; i++) {
+    for(int i = 0; i < numThreads; i++) {
         pthread_create(&thread, NULL, generatePrimes, &num_primes);
     }
     

@@ -69,7 +69,7 @@ int main(int argc, char** argv) {
     num_primes = atoi(argv[1]);
     bit_length = atoi(argv[2]);
     
-    printf("Key #: %d, Bit-length: %d, Checks/num: %d, Threads: %d\n", num_primes, bit_length, reps, numThreads);
+    //printf("Key #: %d, Bit-length: %d, Checks/num: %d, Threads: %d\n", num_primes, bit_length, reps, numThreads);
     
     numberList = tSafeConstruct();
     mpz_init(globalCounter);

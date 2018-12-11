@@ -8,6 +8,7 @@
 
 mpz_t globalCounter;
 int foundCount = 0;
+int threadCounter = 0;
 pthread_mutex_t counterguard = PTHREAD_MUTEX_INITIALIZER;
 TSAFELIST *numberList;
 
@@ -24,6 +25,7 @@ void * generatePrimes(void * args) {
     mpz_t tempCounter;
     
     pthread_mutex_lock(&counterguard);
+    int tempTC = threadCounter++;
     mpz_init_set(tempCounter, globalCounter);
     pthread_mutex_unlock(&counterguard);
     
@@ -37,6 +39,7 @@ void * generatePrimes(void * args) {
         prob = mpz_probab_prime_p(tempCounter, 100000);
         
         if(prob > 0) {
+            printf("Thread %d found a prime\n", tempTC);
             tSafeEnqueue(numberList, tempCounter);
             foundCount++;
         }
@@ -44,13 +47,12 @@ void * generatePrimes(void * args) {
         pthread_mutex_unlock(&counterguard);
         
         getNextNum(&tempCounter);
-        
     }
 }
 
 int main(int argc, char** argv) {
     printf("Assignment #2-2, Chris Gilardi, cgilardi97@gmail.com\n");
-    pthread_t t1, t2, t3, t4;
+    pthread_t thread;
     TSAFEDATA data;
     int printed = 0;
     int bit_length;
@@ -71,12 +73,11 @@ int main(int argc, char** argv) {
     mpz_init(globalCounter);
     mpz_ui_pow_ui(globalCounter, 2, bit_length);
     mpz_add_ui(globalCounter, globalCounter, 1);
-    pthread_create(&t1, NULL, generatePrimes, &num_primes);
-    pthread_create(&t2, NULL, generatePrimes, &num_primes);
-    pthread_create(&t3, NULL, generatePrimes, &num_primes);
-    pthread_create(&t4, NULL, generatePrimes, &num_primes);
+    for(int i = 0; i < 4; i++) {
+        pthread_create(&thread, NULL, generatePrimes, &num_primes);
+    }
     
-    while(printed < 10) {
+    while(printed < num_primes) {
         data = tSafeDequeue(numberList);
         if(data.isValid == 1) {
             gmp_printf ("%Zd\n", data.value);

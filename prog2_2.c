@@ -81,13 +81,12 @@ int main(int argc, char** argv) {
     while(printed < num_primes) {
         data = tSafeDequeue(numberList);
         if(data.isValid == 1) {
-            gmp_printf ("%Zd\n", data.value);
+            gmp_printf ("%Zd\n", data.value);fflush(NULL);
             printed++;
         } else {
             sleep(1);
         }
     }
     
-    fflush(NULL);
     tSafeDestruct(numberList);
 }

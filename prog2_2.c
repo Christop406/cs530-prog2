@@ -27,7 +27,6 @@ void * generatePrimes(void * args) {
     mpz_t tempCounter;
     
     pthread_mutex_lock(&counterguard);
-    int tempTC = threadCounter++;
     mpz_init_set(tempCounter, globalCounter);
     pthread_mutex_unlock(&counterguard);
     

@@ -83,6 +83,7 @@ int main(int argc, char** argv) {
         if(data.isValid == 1) {
             gmp_printf ("%Zd\n", data.value);fflush(NULL);
             printed++;
+            usleep(100);
         } else {
             sleep(1);
         }
